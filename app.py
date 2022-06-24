@@ -1,15 +1,14 @@
-from models.account import Account
+from models.user import User
 
 
-a1 = Account(1001, 10000.8)
-print(a1)
+u1 = User("user1", 1001)
 
-print(a1.deposit(200))
-print(a1.deposit(0.30))
-print(a1.deposit(0.45))
-print(a1.withdraw(100.50))
+u1.add_account(789.2)
+u1.add_account(1002)
+print(u1)
+print(u1.withdraw(1001001, 200.10))
+print(u1.deposit(1001001, 200.05))
 
-print(a1.query())
 
 
 

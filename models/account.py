@@ -1,6 +1,7 @@
 class Account:
+
     def __init__(self, acct_num, start_balance):
-        self.__account_number = acct_num
+        self.__account_number = str(acct_num)
         self.__balance_dollars = int(start_balance)
         self.__balance_cents = int(((start_balance * 1000) / 10)% 100)
 
@@ -28,3 +29,10 @@ class Account:
     def __str__(self):
         return (f"Account {self.__account_number}: Balance ${self.__balance_dollars:,}."
                 f"{'0' if self.__balance_cents < 10 else ''}{self.__balance_cents}")
+
+    def to_dict(self):
+        return {
+            'account number': self.__account_number,
+            'dollars': self.__balance_dollars,
+            'cents': self.__balance_cents
+        }
