@@ -10,7 +10,7 @@ class Account:
         new_bal = int(curr_bal + (amount * 100))
         self.__balance_dollars = int(new_bal // 100)
         self.__balance_cents = int(new_bal % 100)
-        return (f"You deposited ${amount:.2f}. "
+        return (f"You deposited ${amount:.2f} from account {self.__account_number}. "
                 f"Your new balance is ${self.__balance_dollars:,}."
                 f"{'0' if self.__balance_cents < 10 else ''}{self.__balance_cents}")
 
@@ -19,7 +19,7 @@ class Account:
         new_bal = int(((curr_bal * 10) - (amount * 1000))/10)
         self.__balance_dollars = int(new_bal // 100)
         self.__balance_cents = int(new_bal % 100)
-        return (f"You withdrew ${amount:.2f}. "
+        return (f"You withdrew ${amount:.2f} from account {self.__account_number}. "
                 f"Your new balance is ${self.__balance_dollars:,}."
                 f"{'0' if self.__balance_cents < 10 else ''}{self.__balance_cents}")
 
