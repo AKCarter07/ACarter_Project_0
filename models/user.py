@@ -33,12 +33,6 @@ class User:
     def close_account(self, account):
         self.__user_accounts.pop(account)
 
-    def withdraw(self, account, amount):
-        return self.__user_accounts[f'{account}'].withdraw(amount)
-
-    def deposit(self, account, amount):
-        return self.__user_accounts[f'{account}'].deposit(amount)
-
     def __str__(self):
         line = (f"\n{self.__username} ({self.__idn}) has {self.__num_accounts} account"
                 f"{'s' if self.__num_accounts > 1 or self.__num_accounts == 0 else ''}: \n")
@@ -81,11 +75,8 @@ class User:
 
     def set_accounts(self, accounts_list):
         for account in accounts_list:
-            account_num = account[2]
-            dollars = account[3]
-            cents = account[4]
-            account_object = Account(account_num, dollars, cents)
-            self.__user_accounts[account_num] = account_object
+            account_object = Account(account[2], account[3], account[4])
+            self.__user_accounts[account[2]] = account_object
 
 
 

@@ -16,7 +16,7 @@ class Account:
 
     def withdraw(self, dollars, cents):
         curr_bal = (self.__balance_dollars * 100) + self.__balance_cents
-        new_bal = int(curr_bal + (dollars * 100) + cents)
+        new_bal = int(curr_bal - ((dollars * 100) + cents))
         self.__balance_dollars = int(new_bal // 100)
         self.__balance_cents = int(new_bal % 100)
         return (f"You withdrew ${dollars}.{cents} from account {self.__account_number}. "
@@ -36,3 +36,12 @@ class Account:
             'dollars': self.__balance_dollars,
             'cents': self.__balance_cents
         }
+
+    def get_dollars(self):
+        return self.__balance_dollars
+
+    def get_cents(self):
+        return self.__balance_cents
+
+    def get_account_num(self):
+        return self.__account_number
