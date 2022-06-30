@@ -1,5 +1,4 @@
 from models.user import User
-from exception.user_not_found import UserNotFound
 import psycopg
 import copy
 from dao.account_dao import AccountDao
@@ -43,17 +42,24 @@ class UserDao:
                 cur.execute(f"INSERT INTO project_0.users (user_id, username) VALUES "
                             f"({user_object.get_idn()}, '{user_object.get_username()}')")
                 conn.commit()
-        return f"User {user_object.get_username()} ({user_object.get_idn}) has been " \
+        return f"User {user_object.get_username()} ({user_object.get_idn()}) has been " \
                f"added to the system."
 
-    def edit_user(self, user_id, new_user_info_object):
-        if user_id == new_user_info_object.idn:
-            pass
-        else:
-            pass
-        return new_user_info_object
+    def edit_user(self, user_id, new_info_object):
+        with psycopg.connect(host="localhost", port="5432",
+                             dbname="postgres", user="postgres", password="pass") as conn:
+            with conn.cursor() as cur:
+                cur.execute(f"UPDATE project_0.users SET username = '{new_info_object.get_username()}', "
+                            f"num_accounts = {new_info_object.get_num_accounts()}, active_user = "
+                            f"{new_info_object.get_status()} WHERE user_id = '{user_id}'")
+                conn.commit()
+        return f"User updated. {new_info_object}"
 
     def delete_user(self, user_object):
-
+        with psycopg.connect(host="localhost", port="5432",
+                             dbname="postgres", user="postgres", password="pass") as conn:
+            with conn.cursor() as cur:
+                cur.execute(f"DELETE FROM project_0.accounts WHERE user_id = '{user_object.get_idn()}';"
+                            f"DELETE FROM project_0.users WHERE user_id = '{user_object.get_idn()}';")
         return f"User account for {user_object.get_username()} has been deleted."
 

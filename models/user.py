@@ -78,5 +78,9 @@ class User:
             account_object = Account(account[2], account[3], account[4])
             self.__user_accounts[account[2]] = account_object
 
+    def get_num_accounts(self):
+        return self.__num_accounts
 
+    def get_status(self):
+        return self.__active
 
