@@ -5,9 +5,10 @@ class User:
     def __init__(self, username, idn):
         self.__username = username
         self.__idn = idn
-        self.__password = "password"
         self.__num_accounts = 0
         self.__user_accounts = {}
+        self.__active = True
+        self.__password = "password"
 
     def set_password(self):
         new_pass_1 = '1'
@@ -18,16 +19,16 @@ class User:
                 new_pass_2 = input("Confirm new password: ")
                 if new_pass_1 != new_pass_2:
                     print("Passwords do not match")
-        elif input("Incorrect password \n Old password: ") == self.__password:
-            pass
+            self.__password = new_pass_1
         else:
             print("Please contact customer support for help resetting your password")
 
     def add_account(self, start_balance):
         self.__num_accounts += 1
-        account_id = f"{self.__idn}0{'0' if self.__num_accounts < 10 else ''}{self.__num_accounts}"
+        account_id = f"{self.__idn}00{'0' if self.__num_accounts < 10 else ''}{self.__num_accounts}"
         account = Account(account_id, start_balance)
         self.__user_accounts.update({account_id: account})
+        return f"You have added account {account_id} with amount {start_balance:.2f}."
 
     def close_account(self, account):
         self.__user_accounts.pop(account)
@@ -59,7 +60,32 @@ class User:
         return {
             "username": self.__username,
             "ID Number": self.__idn,
-            "password": self.__password,
             "number of accounts": self.__num_accounts,
             "user accounts": accounts
         }
+
+    def get_username(self):
+        return self.__username
+
+    def get_idn(self):
+        return self.__idn
+
+    def check_account(self, account):
+        return self.__user_accounts[account].query()
+
+    def set_num_accounts(self, num):
+        self.__num_accounts = num
+
+    def set_status(self, status):
+        self.__active = status
+
+    def set_accounts(self, accounts_list):
+        for account in accounts_list:
+            account_num = account[2]
+            dollars = account[3]
+            cents = account[4]
+            account_object = Account(account_num, dollars, cents)
+            self.__user_accounts[account_num] = account_object
+
+
+

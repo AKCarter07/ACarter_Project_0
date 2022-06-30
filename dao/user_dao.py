@@ -1,33 +1,52 @@
 from models.user import User
-
-users = {}
-users.update({"u1": User("user1", 1001)})
-users.update({"u2": User("user2", 1002)})
-users.update({'u3': User("user3", 1003)})
-users['u1'].add_account(789.2)
-users['u1'].add_account(1002)
-users['u2'].add_account(502.73)
+from exception.user_not_found import UserNotFound
+import psycopg
+import copy
 
 
 class UserDao:
 
-    def get_usernames(self, username):
-        return users[username]
+    def get_user(self, user_id):
+        with psycopg.connect(host="localhost", port="5432",
+                             dbname="postgres", user="postgres", password="pass") as conn:
+            with conn.cursor() as cur:
+                cur.execute(f"SELECT * FROM project_0.users WHERE users.user_id = '{user_id}'")
+                for line in cur:
+                    user = User(line[1], line[2])
+                    user.set_num_accounts(line[3])
+                    user.set_status(line[4])
+                    with conn.cursor() as cur2:
+                        cur2.execute(f"SELECT * FROM project_0.accounts WHERE accounts.user_id = '{user_id}'")
+                        user.set_accounts(cur2)
 
     def get_all_users(self):
-        user_values = []
-        for value in users.values():
-            user_values.append(value)
-        return user_values
+        users = []
+        with psycopg.connect(host="localhost", port="5432",
+                             dbname="postgres", user="postgres", password="pass") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT * FROM project_0.users")
+                for user in cur:
+                    user_id = user[1]
+                    username = user[2]
+                    user_object = User(username, user_id)
+                    user_object.set_num_accounts(user[3])
+                    with conn.cursor() as cur2:
+                        cur2.execute(f"SELECT * FROM project_0.accounts WHERE accounts.user_id = '{user_id}'")
+                        user.set_accounts(cur2)
+                    users.append(user_object)
+            return users
 
     def add_user(self, user_object):
-        users[user_object.username] = user_object
-        return user_object
+        pass
 
     def edit_user(self, username, new_user_info_object):
         if username == new_user_info_object.username:
-            users[username] = new_user_info_object
+            pass
         else:
-            del users[username]
-            users[new_user_info_object.username] = new_user_info_object
+            pass
         return new_user_info_object
+
+    def delete_user(self, username):
+
+        return f"User account for {username} has been deleted."
+

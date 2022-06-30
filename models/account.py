@@ -1,25 +1,25 @@
 class Account:
 
-    def __init__(self, acct_num, start_balance):
+    def __init__(self, acct_num, start_dollars, start_cents):
         self.__account_number = str(acct_num)
-        self.__balance_dollars = int(start_balance)
-        self.__balance_cents = int(((start_balance * 1000) / 10)% 100)
+        self.__balance_dollars = int(start_dollars)
+        self.__balance_cents = int(start_cents)
 
-    def deposit(self, amount):
+    def deposit(self, dollars, cents):
         curr_bal = (self.__balance_dollars * 100) + self.__balance_cents
-        new_bal = int(curr_bal + (amount * 100))
+        new_bal = int(curr_bal + (dollars * 100) + cents)
         self.__balance_dollars = int(new_bal // 100)
         self.__balance_cents = int(new_bal % 100)
-        return (f"You deposited ${amount:.2f} from account {self.__account_number}. "
-                f"Your new balance is ${self.__balance_dollars:,}."
+        return (f"You deposited ${dollars}.{'0' if cents < 10 else ''} to account "
+                f"{self.__account_number}. Your new balance is ${self.__balance_dollars:,}."
                 f"{'0' if self.__balance_cents < 10 else ''}{self.__balance_cents}")
 
-    def withdraw(self, amount):
+    def withdraw(self, dollars, cents):
         curr_bal = (self.__balance_dollars * 100) + self.__balance_cents
-        new_bal = int(((curr_bal * 10) - (amount * 1000))/10)
+        new_bal = int(curr_bal + (dollars * 100) + cents)
         self.__balance_dollars = int(new_bal // 100)
         self.__balance_cents = int(new_bal % 100)
-        return (f"You withdrew ${amount:.2f} from account {self.__account_number}. "
+        return (f"You withdrew ${dollars}.{cents} from account {self.__account_number}. "
                 f"Your new balance is ${self.__balance_dollars:,}."
                 f"{'0' if self.__balance_cents < 10 else ''}{self.__balance_cents}")
 
