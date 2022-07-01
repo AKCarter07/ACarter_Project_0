@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from models.user import User
 from service.account_service import AccountService
 from service.customer_service import CustomerService
+from exception.invalid_parameter import InvalidParamError
 
 
 uc = Blueprint('user_controller', __name__)
@@ -14,11 +15,21 @@ def get_all_users():
         "users": customer_service.get_all_users()  # a list of dictionaries
     }
 
-@uc.route('/users/<username>')
-def get_user_by_username(user_id):
+@uc.route('/users/<user_id>')
+def get_user_by_id(user_id):
     try:
         return customer_service.get_user(user_id)  # dictionary
-    except KeyError as e:
+    except InvalidParamError as e:
         return {
-            "message": f"User with Id {user_id} was not found!"
+            "message": f"{e}"
         }, 404
+
+@uc.route('/users', methods=['POST'])
+def add_user():
+    user_json_dict = request.get_json()
+    try:
+        return customer_service.add_user(user_json_dict['username']), 201
+    except InvalidParamError as e:
+        return {
+            "message": f"{e}"
+        }, 400

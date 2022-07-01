@@ -12,14 +12,9 @@ acs = AccountService()
 user_id = 1001
 account_id = 10010001
 
-print(acs.get_accounts(1001))
-
-print(acs.withdraw(1001, 10010001, 10, 0))
-print(acs.deposit(1001, 10010001, 10, 5))
-
-print(acs.add_account(1005, 100, 25))
-# print(acs.delete_account(1001, 10010004))
-
+users = cs.get_all_users()
+x = len(users)
+print(x)
 
 
 

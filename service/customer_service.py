@@ -1,6 +1,6 @@
 from dao.user_dao import UserDao
 from exception.invalid_parameter import InvalidParamError
-from exception.already_exists import AlreadyExistsError
+from models.user import User
 
 
 class CustomerService:
@@ -15,32 +15,45 @@ class CustomerService:
         return user_dictionaries
 
     def get_user(self, user_id):
+        if f'{user_id}' not in self.__user_dao.get_all_users():
+            raise InvalidParamError(f"User Id {user_id} not found.")
         user_obj = self.__user_dao.get_user(user_id)
-        return user_obj
+        return user_obj.to_dict()
 
-    def add_user(self, user_object):
+    def add_user(self, username):
         users = self.__user_dao.get_all_users()
         usernames = []
         user_ids = []
+        idn = 1000 + self.__user_dao.number_idns() + 1
         for user in users:
             usernames.append(user.get_username())
             user_ids.append(user.get_idn())
+        good_to_go = True
+        error_message = ""
 
-        if user_object.get_username() in usernames:
-            raise AlreadyExistsError(f"Username {user_object.get_username()} already exists.")
-        if user_object.get_idn in user_ids:
-            raise AlreadyExistsError(f"User id {user_object.get_idn()} already exists.")
+        if username in usernames:
+            good_to_go = False
+            error_message += f"Username {username} already exists.\n"
+        if idn in user_ids:
+            good_to_go = False
+            error_message += f"User id {idn} already exists.\n"
 
-        if " " in user_object.get_username():
-            raise InvalidParamError("Username cannot contain spaces")
-        if len(user_object.get_username()) < 5:
-            raise InvalidParamError("Username must be 5 or more characters.")
+        if " " in username:
+            good_to_go = False
+            error_message += "Username cannot contain spaces.\n"
+        if len(username) < 5:
+            good_to_go = False
+            error_message += "Username must be 5 or more characters.\n"
 
-        if not len(user_object.get_idn()) == 4:
-            raise InvalidParamError("User ID must be 4 digits.")
+        if not len(str(idn)) == 4:
+            good_to_go = False
+            error_message += "User ID must be 4 digits.\n"
 
-        add_user_object = self.__user_dao.add_user(user_object)
-        return add_user_object
+        if good_to_go:
+            added_user_object = self.__user_dao.add_user(User(username, idn))
+            return added_user_object
+        else:
+            raise InvalidParamError(error_message)
 
     def edit_user(self, user_id, user_object):
         if user_id != user_object.get_idn():

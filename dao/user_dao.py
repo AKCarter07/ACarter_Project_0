@@ -40,7 +40,8 @@ class UserDao:
                              dbname="postgres", user="postgres", password="pass") as conn:
             with conn.cursor() as cur:
                 cur.execute(f"INSERT INTO project_0.users (user_id, username) VALUES "
-                            f"({user_object.get_idn()}, '{user_object.get_username()}')")
+                            f"({user_object.get_idn()}, '{user_object.get_username()}');"
+                            f"INSERT INTO project_0.used_idns (user_id) VALUES ('{user_object.get_idn()}');")
                 conn.commit()
         return f"User {user_object.get_username()} ({user_object.get_idn()}) has been " \
                f"added to the system."
@@ -65,3 +66,12 @@ class UserDao:
                             f"DELETE FROM project_0.users WHERE user_id = '{user_object.get_idn()}';")
         return f"User account for {user_object.get_username()} has been deleted."
 
+    def number_idns(self):
+        idns = []
+        with psycopg.connect(host="localhost", port="5432",
+                             dbname="postgres", user="postgres", password="pass") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT * FROM project_0.used_idns;")
+                for line in cur:
+                    idns.append(line)
+                return len(idns)
