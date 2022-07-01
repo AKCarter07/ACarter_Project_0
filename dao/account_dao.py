@@ -22,6 +22,7 @@ class AccountDao:
             with conn.cursor() as cur:
                 cur.execute(f"SELECT * FROM project_0.accounts WHERE accounts.user_id = '{user_object.get_idn()}'")
                 user_object.set_accounts(cur)
+                return user_object
 
     def edit_account(self, account_id, user_id, command, dollars, cents):
         with psycopg.connect(host="localhost", port="5432",

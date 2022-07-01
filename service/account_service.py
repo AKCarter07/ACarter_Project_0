@@ -1,14 +1,16 @@
 from dao.user_dao import UserDao
+from dao.account_dao import AccountDao
 from exception.invalid_parameter import InvalidParamError
 
 
 class AccountService:
     def __init__(self):
         self.__user_dao = UserDao()
+        self.__account_dao = AccountDao()
 
-    def get_accounts(self, username):
-        user_obj = self.__user_dao.get_user(username)
-        return user_obj.__str__()
+    def get_accounts(self, user_id):
+        user_obj = self.__user_dao.get_user(user_id)
+        return user_obj
 
     def withdraw(self, username, account, amount):
         user_obj = self.__user_dao.get_user(username)

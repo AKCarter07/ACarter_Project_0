@@ -31,7 +31,7 @@ class UserDao:
                     username = user[2]
                     user_object = User(username, user_id)
                     user_object.set_num_accounts(user[3])
-                    self.__account_dao.get_user_accounts(user_id)
+                    self.__account_dao.get_user_accounts(user_object)
                     users.append(user_object)
             return users
 
