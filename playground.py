@@ -7,7 +7,6 @@ from dao.user_dao import UserDao
 from dao.account_dao import AccountDao
 
 
-
 cs = CustomerService()
 acs = AccountService()
 user_id = 1001
@@ -20,8 +19,8 @@ account_dao = AccountDao()
 # print(account_dao.edit_account(account_id, user_id, 'withdraw', 20, 10))
 # print(account_dao.get_user_accounts(user1))
 #
-# user3 = User('user3', 1003)
-# print(user_dao.add_user(User('user3', 1003)))
+
+print(user_dao.add_user(User('user3', 1003)))
 #
 # print(account_dao.create_account('1003', '10030003', 25, 25))
 #
@@ -32,4 +31,8 @@ account_dao = AccountDao()
 # print(user_dao.edit_user(1004, new4))
 
 # print(acs.get_accounts(1001))
-print(cs.get_all_users())
+# print(cs.get_user(1001))
+# print(cs.get_all_users())
+
+user3 = cs.get_user(1003)
+print(cs.delete_user(user3))

@@ -46,6 +46,7 @@ class UserDao:
                f"added to the system."
 
     def edit_user(self, user_id, new_info_object):
+        previous_info = self.get_user(user_id)
         with psycopg.connect(host="localhost", port="5432",
                              dbname="postgres", user="postgres", password="pass") as conn:
             with conn.cursor() as cur:
@@ -53,7 +54,8 @@ class UserDao:
                             f"num_accounts = {new_info_object.get_num_accounts()}, active_user = "
                             f"{new_info_object.get_status()} WHERE user_id = '{user_id}'")
                 conn.commit()
-        return f"User updated. {new_info_object}"
+                edited_user = self.get_user(user_id)
+        return f"User has been updated from: {previous_info} to {edited_user}"
 
     def delete_user(self, user_object):
         with psycopg.connect(host="localhost", port="5432",

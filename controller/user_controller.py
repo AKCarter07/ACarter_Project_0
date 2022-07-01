@@ -4,7 +4,6 @@ from service.account_service import AccountService
 from service.customer_service import CustomerService
 
 
-
 uc = Blueprint('user_controller', __name__)
 account_service = AccountService()
 customer_service = CustomerService()
@@ -16,10 +15,10 @@ def get_all_users():
     }
 
 @uc.route('/users/<username>')
-def get_user_by_username(username):
+def get_user_by_username(user_id):
     try:
-        return user_service.get_user_by_username(username)  # dictionary
+        return customer_service.get_user(user_id)  # dictionary
     except KeyError as e:
         return {
-            "message": f"User with username {username} was not found!"
+            "message": f"User with Id {user_id} was not found!"
         }, 404
