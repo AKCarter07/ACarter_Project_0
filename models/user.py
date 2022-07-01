@@ -84,3 +84,6 @@ class User:
     def get_status(self):
         return self.__active
 
+    def get_accounts(self):
+        return self.__user_accounts
+

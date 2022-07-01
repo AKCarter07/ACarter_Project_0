@@ -11,7 +11,7 @@ class AccountDao:
                              dbname="postgres", user="postgres", password="pass") as conn:
             with conn.cursor() as cur:
                 cur.execute(f"SELECT * FROM project_0.accounts WHERE accounts.user_id = '{user_id}' AND "
-                            f"accounts.account_number = '{account_id}")
+                            f"accounts.account_number = '{account_id}'")
                 for line in cur:
                     account = Account(line[2], line[3], line[4])
                     return account

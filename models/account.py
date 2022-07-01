@@ -24,7 +24,7 @@ class Account:
                 f"{'0' if self.__balance_cents < 10 else ''}{self.__balance_cents}")
 
     def query(self):
-        return((self.__balance_dollars * 100) + self.__balance_cents)
+        return (self.__balance_dollars * 100) + self.__balance_cents
 
     def __str__(self):
         return (f"Account {self.__account_number}: Balance ${self.__balance_dollars:,}."
