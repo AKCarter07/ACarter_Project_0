@@ -8,20 +8,6 @@ class User:
         self.__num_accounts = 0
         self.__user_accounts = {}
         self.__active = True
-        self.__password = "password"
-
-    def set_password(self):
-        new_pass_1 = '1'
-        new_pass_2 = '2'
-        if input("Old password: ") == self.__password:
-            while new_pass_1 != new_pass_2:
-                new_pass_1 = input("New password: ")
-                new_pass_2 = input("Confirm new password: ")
-                if new_pass_1 != new_pass_2:
-                    print("Passwords do not match")
-            self.__password = new_pass_1
-        else:
-            print("Please contact customer support for help resetting your password")
 
     def add_account(self, start_balance):
         self.__num_accounts += 1
@@ -53,9 +39,10 @@ class User:
             accounts.append(self.__user_accounts.get(key).to_dict())
         return {
             "username": self.__username,
-            "ID Number": self.__idn,
-            "number of accounts": self.__num_accounts,
-            "user accounts": accounts
+            "user_id": self.__idn,
+            "num_accounts": self.__num_accounts,
+            "accounts": accounts,
+            "active": self.__active
         }
 
     def get_username(self):

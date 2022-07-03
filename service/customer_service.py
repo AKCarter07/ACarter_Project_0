@@ -7,6 +7,14 @@ class CustomerService:
     def __init__(self):
         self.__user_dao = UserDao()
 
+    def user_id_list(self):
+        users = self.__user_dao.get_all_users()
+        user_ids = []
+        for user in users:
+            if user.get_status():
+                user_ids.append(user.get_idn())
+        return user_ids
+
     def get_all_users(self):
         list_user_objects = self.__user_dao.get_all_users()
         user_dictionaries = []
@@ -15,7 +23,8 @@ class CustomerService:
         return user_dictionaries
 
     def get_user(self, user_id):
-        if f'{user_id}' not in self.__user_dao.get_all_users():
+        id_list = self.user_id_list()
+        if f'{user_id}' not in id_list:
             raise InvalidParamError(f"User Id {user_id} not found.")
         user_obj = self.__user_dao.get_user(user_id)
         return user_obj.to_dict()
@@ -63,7 +72,9 @@ class CustomerService:
 
     def delete_user(self, user_object):
         check_user = self.get_user(user_object.get_idn())
-        if str(user_object) != str(check_user):
+        print(user_object.to_dict())
+        print(check_user)
+        if str(user_object.to_dict()) != str(check_user):
             raise InvalidParamError("Cannot confirm user information.")
         self.__user_dao.delete_user(user_object)
         return f"All customer and account data for {user_object.get_username()} " \

@@ -31,6 +31,7 @@ class UserDao:
                     username = user[2]
                     user_object = User(username, user_id)
                     user_object.set_num_accounts(user[3])
+                    user_object.set_status(user[4])
                     self.__account_dao.get_user_accounts(user_object)
                     users.append(user_object)
             return users
@@ -56,7 +57,7 @@ class UserDao:
                             f"{new_info_object.get_status()} WHERE user_id = '{user_id}'")
                 conn.commit()
                 edited_user = self.get_user(user_id)
-        return f"User has been updated from: {previous_info} to {edited_user}"
+        return f"User has been updated: {edited_user}"
 
     def delete_user(self, user_object):
         with psycopg.connect(host="localhost", port="5432",
