@@ -7,18 +7,26 @@ from dao.user_dao import UserDao
 from dao.account_dao import AccountDao
 
 ud = UserDao()
+ad = AccountDao()
 cs = CustomerService()
 acs = AccountService()
 user_id = 1001
 account_id = 10010001
 
-users = cs.get_all_users()
-x = len(users)
-print(x)
+# users = cs.get_all_users()
+# x = len(users)
+# print(x)
+#
+# print(ud.get_all_users())
+# print(cs.get_all_users())
 
-print(ud.get_all_users())
-print(cs.get_all_users())
+user_obj = ud.get_user(user_id)
+accounts = user_obj.get_accounts()
+acct_list = []
+for account in accounts:
+    acct_list.append(ad.get_account(account, user_id).to_dict())
 
+print(acct_list)
 
 
 
