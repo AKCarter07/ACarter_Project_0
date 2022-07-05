@@ -43,7 +43,6 @@ class User:
             "username": self.__username,
             "user_id": self.__idn,
             "num_active_accounts": self.__num_active_accounts,
-            "accounts": accounts,
             "active": self.__active
         }
 

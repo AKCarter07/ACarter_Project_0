@@ -65,12 +65,3 @@ def delete_account(user_id, account_number):
                    "message": f"{e}"
                }, 400
 
-
-"""
-try:
-    return customer_service.add_user(user_json_dict['username']), 201
-except InvalidParamError as e:
-    return {
-               "message": f"{e}"
-           }, 400
-"""

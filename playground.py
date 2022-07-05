@@ -20,13 +20,9 @@ account_id = 10010001
 # print(ud.get_all_users())
 # print(cs.get_all_users())
 
-user_obj = ud.get_user(user_id)
-accounts = user_obj.get_accounts()
-acct_list = []
-for account in accounts:
-    acct_list.append(ad.get_account(account, user_id).to_dict())
+print(acs.get_accounts(1001))
 
-print(acct_list)
+
 
 
 
