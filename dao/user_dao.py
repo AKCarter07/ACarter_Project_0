@@ -6,7 +6,7 @@ from dao.account_dao import AccountDao
 
 class UserDao:
     def __init__(self):
-        self.__account_dao = AccountDao()
+        self.account_dao = AccountDao()
 
     def get_user(self, user_id):
         with psycopg.connect(host="localhost", port="5432",
@@ -19,7 +19,7 @@ class UserDao:
                     user.set_num_active_accounts(line[4])
                     user.set_total_accounts(line[3])
                     user.set_status(line[5])
-                    self.__account_dao.get_user_accounts(user)
+                    self.account_dao.get_user_accounts(user)
                     print(user)
                     return user
 
@@ -36,7 +36,7 @@ class UserDao:
                     user_object.set_num_active_accounts(user[4])
                     user_object.set_total_accounts(user[3])
                     user_object.set_status(user[5])
-                    self.__account_dao.get_user_accounts(user_object)
+                    self.account_dao.get_user_accounts(user_object)
                     users.append(user_object)
             return users
 

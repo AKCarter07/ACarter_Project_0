@@ -5,10 +5,10 @@ from models.user import User
 
 class CustomerService:
     def __init__(self):
-        self.__user_dao = UserDao()
+        self.user_dao = UserDao()
 
     def user_id_list(self):
-        users = self.__user_dao.get_all_users()
+        users = self.user_dao.get_all_users()
         user_ids = []
         for user in users:
             if user.get_status():
@@ -16,7 +16,7 @@ class CustomerService:
         return user_ids
 
     def get_all_users(self):
-        list_user_objects = self.__user_dao.get_all_users()
+        list_user_objects = self.user_dao.get_all_users()
         user_dictionaries = []
         for user_obj in list_user_objects:
             user_dictionaries.append(user_obj.to_dict())
@@ -26,14 +26,14 @@ class CustomerService:
         id_list = self.user_id_list()
         if f'{user_id}' not in id_list:
             raise InvalidParamError(f"User Id {user_id} not found.")
-        user_obj = self.__user_dao.get_user(user_id)
+        user_obj = self.user_dao.get_user(user_id)
         return user_obj.to_dict()
 
     def add_user(self, username):
-        users = self.__user_dao.get_all_users()
+        users = self.user_dao.get_all_users()
         usernames = []
         user_ids = []
-        idn = 1000 + self.__user_dao.number_idns() + 1
+        idn = 1000 + self.user_dao.number_idns() + 1
         for user in users:
             usernames.append(user.get_username())
             user_ids.append(user.get_idn())
@@ -59,7 +59,7 @@ class CustomerService:
             error_message += "User ID must be 4 digits.\n"
 
         if good_to_go:
-            added_user_object = self.__user_dao.add_user(User(username, idn))
+            added_user_object = self.user_dao.add_user(User(username, idn))
             return added_user_object
         else:
             raise InvalidParamError(error_message)
@@ -67,7 +67,7 @@ class CustomerService:
     def edit_user(self, user_id, user_object):
         if user_id != user_object.get_idn():
             raise InvalidParamError("Cannot change user Id.")
-        edited_user = self.__user_dao.edit_user(user_id, user_object)
+        edited_user = self.user_dao.edit_user(user_id, user_object)
         return edited_user
 
     def delete_user(self, user_object):
@@ -76,6 +76,6 @@ class CustomerService:
         print(check_user)
         if str(user_object.to_dict()) != str(check_user):
             raise InvalidParamError("Cannot confirm user information.")
-        self.__user_dao.delete_user(user_object)
+        self.user_dao.delete_user(user_object)
         return f"All customer and account data for {user_object.get_username()} " \
                f"has been deleted."
