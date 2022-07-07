@@ -1,8 +1,6 @@
 from flask import Flask
 from controller.user_controller import uc
 from controller.account_controller import ac
-import psycopg
-from models.user import User
 
 
 if __name__ == '__main__':

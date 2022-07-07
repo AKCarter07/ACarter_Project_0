@@ -28,11 +28,15 @@ def test_get_accounts(mocker):
             return None
 
 
-
     def mock_acct_dao_get_account(self, account_id, user_id):
         global n
         n += 1
         return Account(account_id, 10*n, 10)
+
+    def mock_cs_user_list(self):
+        return ['1001', '1002']
+
+    mocker.patch('service.customer_service.CustomerService.user_id_list', mock_cs_user_list)
 
     mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
     mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
@@ -69,6 +73,11 @@ def test_get_accounts_dlt_dgt(mocker):
         n += 1
         return Account(account_id, 10*n, 10)
 
+    def mock_cs_user_list(self):
+        return ['1001', '1002']
+
+    mocker.patch('service.customer_service.CustomerService.user_id_list', mock_cs_user_list)
+
     mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
     mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
     mocker.patch('dao.account_dao.AccountDao.get_account', mock_acct_dao_get_account)
@@ -103,12 +112,17 @@ def test_get_accounts_dgt(mocker):
         n += 1
         return Account(account_id, 10*n, 10)
 
+    def mock_cs_user_list(self):
+        return ['1001', '1002']
+
+    mocker.patch('service.customer_service.CustomerService.user_id_list', mock_cs_user_list)
+
     mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
     mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
     mocker.patch('dao.account_dao.AccountDao.get_account', mock_acct_dao_get_account)
     acs = AccountService()
     # Act
-    actual = acs.get_accounts(1001, 90, None)
+    actual = acs.get_accounts(1001, 100, None)
 
     # Assert
     assert actual == {'10010002': {'account number': '10010002', 'cents': 10, 'dollars': 110}}
@@ -140,6 +154,11 @@ def test_get_accounts_dlt(mocker):
         n += 1
         return Account(account_id, 10*n, 10)
 
+    def mock_cs_user_list(self):
+        return ['1001', '1002']
+
+    mocker.patch('service.customer_service.CustomerService.user_id_list', mock_cs_user_list)
+
     mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
     mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
     mocker.patch('dao.account_dao.AccountDao.get_account', mock_acct_dao_get_account)
@@ -153,6 +172,8 @@ def test_get_accounts_dlt(mocker):
 def test_get_account_positive(mocker):
     def mock_cs_user_list(self):
         return ['1001', '1002']
+
+    mocker.patch('service.customer_service.CustomerService.user_id_list', mock_cs_user_list)
 
     def mock_get_accounts(self, user_id):
         if user_id == 1001:
@@ -174,7 +195,7 @@ def test_get_account_positive(mocker):
         return {'10010001': {'account number': '10010001', 'dollars': 25, 'cents': 25},
                 '10010002': {'account number': '10010002', 'dollars': 100, 'cents': 50}}
 
-    mocker.patch('service.customer_service.CustomerService.user_id_list', mock_cs_user_list)
+
     mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
     mocker.patch('dao.account_dao.AccountDao.get_account', mock_get_account)
     mocker.patch('dao.user_dao.UserDao.get_user', mock_get_user_accounts)

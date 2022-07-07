@@ -11,23 +11,26 @@ class AccountService:
         self.cs = CustomerService()
 
     def get_accounts(self, user_id, dgt, dlt):
-        user_obj = self.user_dao.get_user(user_id)
-        accounts = user_obj.get_accounts()
-        acct_list = {}
-        for account in accounts:
-            dollars = self.account_dao.get_account(account, user_id).get_dollars()
-            if dgt != None and dlt != None:
-                if dollars > int(dgt) and dollars < int(dlt):
+        if f'{user_id}' not in self.cs.user_id_list():
+            raise InvalidParamError(f"User Id does not exist.")
+        else:
+            user_obj = self.user_dao.get_user(user_id)
+            accounts = user_obj.get_accounts()
+            acct_list = {}
+            for account in accounts:
+                dollars = self.account_dao.get_account(account, user_id).get_dollars()
+                if dgt != None and dlt != None:
+                    if dollars >= int(dgt) and dollars < int(dlt):
+                        acct_list.update({account: self.account_dao.get_account(account, user_id).to_dict()})
+                elif dgt == None and dlt != None:
+                    if dollars < int(dlt):
+                        acct_list.update({account: self.account_dao.get_account(account, user_id).to_dict()})
+                elif dgt != None and dlt == None:
+                    if dollars >= int(dgt):
+                        acct_list.update({account: self.account_dao.get_account(account, user_id).to_dict()})
+                else:
                     acct_list.update({account: self.account_dao.get_account(account, user_id).to_dict()})
-            elif dgt == None and dlt != None:
-                if dollars < int(dlt):
-                    acct_list.update({account: self.account_dao.get_account(account, user_id).to_dict()})
-            elif dgt != None and dlt == None:
-                if dollars > int(dgt):
-                    acct_list.update({account: self.account_dao.get_account(account, user_id).to_dict()})
-            else:
-                acct_list.update({account: self.account_dao.get_account(account, user_id).to_dict()})
-        return acct_list
+            return acct_list
 
     def get_account(self, user_id, account_number):
         if f'{user_id}' not in self.cs.user_id_list():

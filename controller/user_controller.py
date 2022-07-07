@@ -38,7 +38,7 @@ def add_user():
 def edit_user_by_id(user_id):
     user_json_dict = request.get_json()
     user_object = User(user_json_dict['username'], user_json_dict['user_id'])
-    user_object.set_num_active_accounts(user_json_dict['num_accounts'])
+    user_object.set_num_active_accounts(user_json_dict['num_active_accounts'])
     user_object.set_status(user_json_dict['active'])
     try:
         return customer_service.edit_user(user_id, user_object), 201
@@ -52,9 +52,8 @@ def delete_user(user_id):
     user_json_dict = request.get_json()
     if user_id == user_json_dict['user_id']:
         user_object = User(user_json_dict['username'], user_json_dict['user_id'])
-        user_object.set_num_active_accounts(user_json_dict['num_accounts'])
+        user_object.set_num_active_accounts(user_json_dict['num_active_accounts'])
         user_object.set_status(user_json_dict['active'])
-        user_object.set_accounts(user_json_dict['accounts'])
         try:
             return customer_service.delete_user(user_object), 201
         except InvalidParamError as e:
@@ -62,6 +61,5 @@ def delete_user(user_id):
                     "message": f"{e}"
                    }, 400
     else:
-        print("Something has gone wrong with the delete user operation "
-              "from the user controller module. Please contact IT to "
-              "resolve this issue.")
+        return "User Id does not match user account submitted for deletion." \
+                " Please check account information and resubmit request."

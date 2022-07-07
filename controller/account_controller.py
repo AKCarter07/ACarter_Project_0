@@ -13,6 +13,7 @@ customer_service = CustomerService()
 def get_user_accounts(user_id):
     dgt = request.args.get('DollarsGreaterThan')
     dlt = request.args.get('DollarsLessThan')
+    print("user_id =", user_id)
     try:
         return account_service.get_accounts(user_id, dgt, dlt), 201
     except InvalidParamError as e:
