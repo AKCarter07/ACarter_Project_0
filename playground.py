@@ -13,30 +13,12 @@ acs = AccountService()
 user_id = 1001
 account_id = 10010001
 
+
+acs.get_accounts(1001)
+print(acs.get_accounts(1001))
 # users = cs.get_all_users()
 # x = len(users)
 # print(x)
 #
 # print(ud.get_all_users())
 # print(cs.get_all_users())
-
-user1 = User('user1', 1001)
-user1.set_num_active_accounts(2)
-user1.set_total_accounts(2)
-user2 = User('user2', 1002)
-user2.set_num_active_accounts(1)
-user2.set_total_accounts(1)
-users = [user1.to_dict(), user2.to_dict()]
-
-print(users)
-
-
-
-
-
-
-
-# user1 = user_dao.get_user(user_id)
-# print(user_dao.add_user(User('user3', 1003)))
-# user3 = cs.get_user(1003)
-# print(cs.delete_user(user3))

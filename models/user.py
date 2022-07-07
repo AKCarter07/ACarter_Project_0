@@ -10,13 +10,14 @@ class User:
         self.user_accounts = {}
         self.active = True
 
-    def add_account(self, start_balance):
+    def add_account(self, dollars, cents):
         self.num_active_accounts += 1
         self.num_accounts += 1
         account_id = f"{self.idn}00{'0' if self.num_accounts < 10 else ''}{self.num_accounts}"
-        account = Account(account_id, start_balance)
+        account = Account(account_id, dollars, cents)
         self.user_accounts.update({account_id: account})
-        return f"You have added account {account_id} with amount {start_balance:.2f}."
+        return f"You have added account {account_id} with amount ${dollars}." \
+               f"{'0' if cents < 10 else ''}{cents}"
 
     def close_account(self, account):
         self.user_accounts.pop(account)

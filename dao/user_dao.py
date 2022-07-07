@@ -1,6 +1,5 @@
 from models.user import User
 import psycopg
-import copy
 from dao.account_dao import AccountDao
 
 
@@ -14,13 +13,11 @@ class UserDao:
             with conn.cursor() as cur:
                 cur.execute(f"SELECT * FROM project_0.users WHERE users.user_id = '{user_id}'")
                 for line in cur:
-                    print(line)
                     user = User(line[2], line[1])
                     user.set_num_active_accounts(line[4])
                     user.set_total_accounts(line[3])
                     user.set_status(line[5])
                     self.account_dao.get_user_accounts(user)
-                    print(user)
                     return user
 
     def get_all_users(self):

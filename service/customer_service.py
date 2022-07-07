@@ -43,9 +43,6 @@ class CustomerService:
         if username in usernames:
             good_to_go = False
             error_message += f"Username {username} already exists.\n"
-        if idn in user_ids:
-            good_to_go = False
-            error_message += f"User id {idn} already exists.\n"
 
         if " " in username:
             good_to_go = False
@@ -53,10 +50,6 @@ class CustomerService:
         if len(username) < 5:
             good_to_go = False
             error_message += "Username must be 5 or more characters.\n"
-
-        if not len(str(idn)) == 4:
-            good_to_go = False
-            error_message += "User ID must be 4 digits.\n"
 
         if good_to_go:
             added_user_object = self.user_dao.add_user(User(username, idn))
@@ -72,8 +65,6 @@ class CustomerService:
 
     def delete_user(self, user_object):
         check_user = self.get_user(user_object.get_idn())
-        print(user_object.to_dict())
-        print(check_user)
         if str(user_object.to_dict()) != str(check_user):
             raise InvalidParamError("Cannot confirm user information.")
         self.user_dao.delete_user(user_object)

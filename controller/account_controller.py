@@ -11,8 +11,10 @@ customer_service = CustomerService()
 
 @ac.route ('/users/<user_id>/accounts')
 def get_user_accounts(user_id):
+    dgt = request.args.get('DollarsGreaterThan')
+    dlt = request.args.get('DollarsLessThan')
     try:
-        return account_service.get_accounts(user_id), 201
+        return account_service.get_accounts(user_id, dgt, dlt), 201
     except InvalidParamError as e:
         return {
             "message": f"{e}"

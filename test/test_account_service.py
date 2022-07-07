@@ -6,38 +6,149 @@ from dao.user_dao import UserDao
 import pytest
 from exception.invalid_parameter import InvalidParamError
 
+n = 1
+
 
 def test_get_accounts(mocker):
     # Arrange
-    def mock_get_accounts(self, user_id):
+    def mock_get_accounts(self, user_id, dgt, dlt):
         if user_id == 1001:
-            return {'10010001': {'account number': '10010001', 'dollars': 10, 'cents': 10},
-                    '10010002': {'account number': '10010002', 'dollars': 10, 'cents': 10}}
+            return {'10010001': {'account number': '10010001', 'dollars': 30, 'cents': 10},
+                    '10010002': {'account number': '10010002', 'dollars': 50, 'cents': 10}}
         else:
             return None
 
     def mock_dao_get_user(self, user_id):
         if user_id == 1001:
             user1 = User('user1', 1001)
-            user1.add_account(10, 10)
-            user1.add_account(10, 10)
+            user1.add_account(30, 10)
+            user1.add_account(50, 10)
             return user1
         else:
             return None
 
+
+
     def mock_acct_dao_get_account(self, account_id, user_id):
-        return Account(account_id, 10, 10)
+        global n
+        n += 1
+        return Account(account_id, 10*n, 10)
 
     mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
     mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
     mocker.patch('dao.account_dao.AccountDao.get_account', mock_acct_dao_get_account)
     acs = AccountService()
     # Act
-    actual = acs.get_accounts(1001)
+    actual = acs.get_accounts(1001, None, None)
 
     # Assert
-    assert actual == {'10010001': {'account number': '10010001', 'cents': 10, 'dollars': 10},
-                      '10010002': {'account number': '10010002', 'cents': 10, 'dollars': 10}}
+    assert actual == {'10010001': {'account number': '10010001', 'cents': 10, 'dollars': 30},
+                      '10010002': {'account number': '10010002', 'cents': 10, 'dollars': 50}}
+
+
+def test_get_accounts_dlt_dgt(mocker):
+    # Arrange
+    def mock_get_accounts(self, user_id, dgt, dlt):
+        if user_id == 1001:
+            return {'10010001': {'account number': '10010001', 'dollars': 30, 'cents': 10},
+                    '10010002': {'account number': '10010002', 'dollars': 50, 'cents': 10}}
+        else:
+            return None
+
+    def mock_dao_get_user(self, user_id):
+        if user_id == 1001:
+            user1 = User('user1', 1001)
+            user1.add_account(30, 10)
+            user1.add_account(50, 10)
+            return user1
+        else:
+            return None
+
+    def mock_acct_dao_get_account(self, account_id, user_id):
+        global n
+        n += 1
+        return Account(account_id, 10*n, 10)
+
+    mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
+    mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
+    mocker.patch('dao.account_dao.AccountDao.get_account', mock_acct_dao_get_account)
+    acs = AccountService()
+    # Act
+    actual = acs.get_accounts(1001, 10, 80)
+
+    # Assert
+    assert actual == {'10010001': {'account number': '10010001', 'cents': 10, 'dollars': 70}}
+
+
+def test_get_accounts_dgt(mocker):
+    # Arrange
+    def mock_get_accounts(self, user_id, dgt, dlt):
+        if user_id == 1001:
+            return {'10010001': {'account number': '10010001', 'dollars': 30, 'cents': 10},
+                    '10010002': {'account number': '10010002', 'dollars': 50, 'cents': 10}}
+        else:
+            return None
+
+    def mock_dao_get_user(self, user_id):
+        if user_id == 1001:
+            user1 = User('user1', 1001)
+            user1.add_account(30, 10)
+            user1.add_account(50, 10)
+            return user1
+        else:
+            return None
+
+    def mock_acct_dao_get_account(self, account_id, user_id):
+        global n
+        n += 1
+        return Account(account_id, 10*n, 10)
+
+    mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
+    mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
+    mocker.patch('dao.account_dao.AccountDao.get_account', mock_acct_dao_get_account)
+    acs = AccountService()
+    # Act
+    actual = acs.get_accounts(1001, 90, None)
+
+    # Assert
+    assert actual == {'10010002': {'account number': '10010002', 'cents': 10, 'dollars': 110}}
+
+
+n = 1
+
+
+def test_get_accounts_dlt(mocker):
+    # Arrange
+    def mock_get_accounts(self, user_id, dgt, dlt):
+        if user_id == 1001:
+            return {'10010001': {'account number': '10010001', 'dollars': 30, 'cents': 10},
+                    '10010002': {'account number': '10010002', 'dollars': 50, 'cents': 10}}
+        else:
+            return None
+
+    def mock_dao_get_user(self, user_id):
+        if user_id == 1001:
+            user1 = User('user1', 1001)
+            user1.add_account(30, 10)
+            user1.add_account(50, 10)
+            return user1
+        else:
+            return None
+
+    def mock_acct_dao_get_account(self, account_id, user_id):
+        global n
+        n += 1
+        return Account(account_id, 10*n, 10)
+
+    mocker.patch('dao.account_dao.AccountDao.get_user_accounts', mock_get_accounts)
+    mocker.patch('dao.user_dao.UserDao.get_user', mock_dao_get_user)
+    mocker.patch('dao.account_dao.AccountDao.get_account', mock_acct_dao_get_account)
+    acs = AccountService()
+    # Act
+    actual = acs.get_accounts(1001, None, 140)
+
+    # Assert
+    assert actual == {'10010001': {'account number': '10010001', 'cents': 10, 'dollars': 130}}
 
 def test_get_account_positive(mocker):
     def mock_cs_user_list(self):
